@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'Location',
     'drf_yasg',
     'rest_framework',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [

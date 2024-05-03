@@ -28,3 +28,11 @@ def calculateDistance(origin_lat, origin_long, destination_lat, destination_long
     else:
         result = Exception
     return result
+
+def calculateRoute(origin_lat, origin_long, destination_lat, destination_long):
+    origins = f"{origin_lat},{origin_long}"
+    destinations = f"{destination_lat},{destination_long}"
+    url = f'https://maps.googleapis.com/maps/api/directions/json?origin={origins}&destination={destinations}&mode=walking&key={GOOGLE_MAPS_API_KEY}'
+    response = requests.get(url)
+    data = response.json()
+    return data

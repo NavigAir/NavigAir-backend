@@ -5,7 +5,7 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.decorators import api_view
 
-from Location.services.getters import calculateDistance
+from Location.services.getters import calculateDistance, calculateRoute
 from Location.services.setters import convertAddressToCoordinates, convertCoordinatesToAddress
 
 
@@ -149,3 +149,48 @@ def calculateDistanceBetweenCoordinates(request):
     except Exception:
         return JsonResponse({'error': 'Internal error'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     return JsonResponse(distance, status=status.HTTP_200_OK, safe=False)
+
+@swagger_auto_schema(
+    method='get',
+    operation_description="Calculates the optimal route between two sets of geographic coordinates.",
+    manual_parameters=[
+        openapi.Parameter('origin_lat', openapi.IN_QUERY, description="Latitude of the origin point.", type=openapi.TYPE_STRING),
+        openapi.Parameter('origin_long', openapi.IN_QUERY, description="Longitude of the origin point.", type=openapi.TYPE_STRING),
+        openapi.Parameter('destination_lat', openapi.IN_QUERY, description="Latitude of the destination point.", type=openapi.TYPE_STRING),
+        openapi.Parameter('destination_long', openapi.IN_QUERY, description="Longitude of the destination point.", type=openapi.TYPE_STRING),
+    ],
+    responses={
+        status.HTTP_200_OK: openapi.Response(
+            description="Distance between the origin and destination points in kilometers.",
+            schema=openapi.Schema(type=openapi.TYPE_NUMBER)
+        ),
+        status.HTTP_400_BAD_REQUEST: openapi.Response(
+            description="One or more required parameters are missing.",
+            examples={
+                "application/json": {"error": "Origin_lat, origin_long, destination_lat, and destination_long are required"}
+            }
+        ),
+        status.HTTP_500_INTERNAL_SERVER_ERROR: openapi.Response(
+            description="An internal server error occurred.",
+            examples={
+                "application/json": {"error": "Internal error"}
+            }
+        )
+    }
+)
+@api_view(['GET'])
+def calculateRouteBetweenCoordinates(request):
+    origin_lat = request.query_params.get('origin_lat')
+    origin_long = request.query_params.get('origin_long')
+    destination_lat = request.query_params.get('destination_lat')
+    destination_long = request.query_params.get('destination_long')
+
+    if None in [origin_lat, origin_long, destination_lat, destination_long]:
+        return JsonResponse({'error': 'Origin_lat, origin_long, destination_lat and destination_long are required'},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        route = calculateRoute(origin_lat, origin_long, destination_lat, destination_long)
+    except Exception:
+        return JsonResponse({'error': 'Internal error'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    return JsonResponse(route, status=status.HTTP_200_OK, safe=False)
