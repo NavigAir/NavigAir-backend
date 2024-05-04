@@ -105,11 +105,9 @@ def users(request):
         visual = request.query_params.get('visual')
         mail = request.query_params.get('mail')
         pwd = request.query_params.get('pwd')
-        dni = request.query_params.get('dni')
         passport = request.query_params.get('passport')
         address = request.query_params.get('address')
         birthday = request.query_params.get('birthday')
-        assigned_flight = request.query_params.get('assigned_flight')
         if existsUser(mail):
             return JsonResponse({"error": "User already exists."},
                                 status=status.HTTP_400_BAD_REQUEST)

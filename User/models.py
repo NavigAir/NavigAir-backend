@@ -6,11 +6,10 @@ from Flight.models import Flight
 
 class User(models.Model):
     name = models.CharField(max_length=255, null=False)
-    age = models.IntegerField(null=False)
+    age = models.IntegerField(null=True)
     visual_percentage = models.IntegerField(null=False)
     mail = models.EmailField(null=False, unique=True)
     pwd = models.CharField(max_length=255, null=False, unique=True)
-    dni = models.CharField(max_length=255, null=False, unique=True)
     passport = models.CharField(max_length=255, null=False, unique=True)
     address = models.CharField(max_length=255, null=True)
     birthday = models.DateField(null=True)
