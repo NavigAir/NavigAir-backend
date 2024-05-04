@@ -1,8 +1,8 @@
 import requests
 
 from BackendNavigair.settings import GOOGLE_MAPS_API_KEY
-from Location.models import Location
-from Location.serializers import LocationSerializer
+from Location.models import Location, BoardingDoor
+from Location.serializers import LocationSerializer, BoardingDoorSerializer
 
 
 # Calculate the distance between two coordinates
@@ -69,4 +69,18 @@ def listLocations():
 def getLocation(latitude, longitude):
     location = Location.objects.get(latitude=latitude, longitude=longitude)
     serializer = LocationSerializer(location)
+    return serializer
+
+# List all hardcoded Locations
+@staticmethod
+def listBoardingDoors():
+    boarding_doors = BoardingDoor.objects.all()
+    data = BoardingDoorSerializer(boarding_doors, many=True)
+    return data
+
+# Get a location from a certain latitude and longitude
+@staticmethod
+def getBoardingDoor(latitude, longitude):
+    boarding_doors = BoardingDoor.objects.get(latitude=latitude, longitude=longitude)
+    serializer = BoardingDoorSerializer(boarding_doors)
     return serializer

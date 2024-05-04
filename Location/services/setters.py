@@ -1,8 +1,8 @@
 import requests
 
 from BackendNavigair.settings import GOOGLE_MAPS_API_KEY
-from Location.models import Location
-from Location.serializers import LocationSerializer
+from Location.models import Location, BoardingDoor
+from Location.serializers import LocationSerializer, BoardingDoorSerializer
 
 
 # Convert coordinates into an address
@@ -48,4 +48,19 @@ def putLocation(latitude, longitude, type):
     location.type = type
     location.save()
     serializer = LocationSerializer(location, many=False)
+    return serializer
+
+# Modify a boarding door
+@staticmethod
+def putBoardingDoor(latitude, longitude, type, code, finger):
+    if finger == "true":
+        f = True
+    else:
+        f = False
+    boarding_door = BoardingDoor.objects.get(latitude=latitude, longitude=longitude)
+    boarding_door.type = type
+    boarding_door.code = code
+    boarding_door.finger = f
+    boarding_door.save()
+    serializer = BoardingDoorSerializer(boarding_door, many=False)
     return serializer

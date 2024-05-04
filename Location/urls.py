@@ -1,8 +1,10 @@
 from django.urls import path
-from Location.views import views, location
+from Location.views import views, location, boarding_door
 
 urlpatterns = [
     path('', location.locationList, name='list_locations'),
+    path('boarding_door', boarding_door.boardingDoorList, name='boarding_doors_list'),
+    path('boarding_door/unit', boarding_door.boardingDoors, name='boarding_doors'),
     path('unit', location.locations, name='locations'),
     path('address/coordinates', views.addressConverter, name='address_to_coordinates_converter'),
     path('coordinates/address', views.coordinatesConverter, name='coordinates_to_address_converter'),
