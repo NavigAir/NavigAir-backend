@@ -5,7 +5,7 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.decorators import api_view
 
-from Location.services.getters import calculateDistance, calculateRoute
+from Location.services.getters import calculateDistance, calculateRoute, getNearbyPlaces
 from Location.services.setters import convertAddressToCoordinates, convertCoordinatesToAddress
 
 
@@ -194,3 +194,39 @@ def calculateRouteBetweenCoordinates(request):
     except Exception:
         return JsonResponse({'error': 'Internal error'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     return JsonResponse(route, status=status.HTTP_200_OK, safe=False)
+
+@swagger_auto_schema(
+    method='get',
+    operation_description="Retrieve nearby places based on text input, latitude, and longitude",
+    manual_parameters=[
+        openapi.Parameter('latitude', openapi.IN_QUERY, description="Latitude of the location", type=openapi.TYPE_STRING),
+        openapi.Parameter('longitude', openapi.IN_QUERY, description="Longitude of the location", type=openapi.TYPE_STRING),
+        openapi.Parameter('string', openapi.IN_QUERY, description="Search string for places", type=openapi.TYPE_STRING)
+    ],
+    responses={
+        200: openapi.Response('Successful Response', openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'results': openapi.Schema(type=openapi.TYPE_ARRAY, items=openapi.Schema(type=openapi.TYPE_OBJECT)),
+                'status': openapi.Schema(type=openapi.TYPE_STRING)
+            }
+        )),
+        400: 'String, latitude and longitude are required',
+        500: 'Internal error'
+    }
+)
+
+@api_view(['GET'])
+def getNearbyPlacesByText(request):
+    latitude = request.query_params.get('latitude')
+    longitude = request.query_params.get('longitude')
+    string = request.query_params.get('string')
+
+    if None in [latitude, longitude]:
+        return JsonResponse({'error': 'String, latitude and longitude are required'},
+                            status=status.HTTP_400_BAD_REQUEST)
+    try:
+        places = getNearbyPlaces(latitude, longitude, string)
+    except Exception:
+        return JsonResponse({'error': 'Internal error'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    return JsonResponse(places, status=status.HTTP_200_OK, safe=False)

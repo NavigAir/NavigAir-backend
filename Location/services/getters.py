@@ -29,6 +29,8 @@ def calculateDistance(origin_lat, origin_long, destination_lat, destination_long
         result = Exception
     return result
 
+# Get the walking optimal rute between two coordinates
+@staticmethod
 def calculateRoute(origin_lat, origin_long, destination_lat, destination_long):
     origins = f"{origin_lat},{origin_long}"
     destinations = f"{destination_lat},{destination_long}"
@@ -36,3 +38,19 @@ def calculateRoute(origin_lat, origin_long, destination_lat, destination_long):
     response = requests.get(url)
     data = response.json()
     return data
+
+# Get the surrounding places based on a text
+@staticmethod
+def getNearbyPlaces(latitude, longitude, string):
+    url_base = "https://maps.googleapis.com/maps/api/place/nearbysearch/json"
+    parametros = {
+        'location': f'{latitude},{longitude}',
+        'radius': 500,  # Radio en metros
+        'type': string,
+        'key': GOOGLE_MAPS_API_KEY
+    }
+    respuesta = requests.get(url_base, params=parametros)
+    if respuesta.status_code == 200:
+        return respuesta.json()
+    else:
+        return Exception
