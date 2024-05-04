@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'User',
     'Location',
+    'Flight',
     'drf_yasg',
     'rest_framework',
     'corsheaders'

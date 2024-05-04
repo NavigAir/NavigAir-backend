@@ -19,5 +19,6 @@ urlpatterns = [
     re_path(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     path('location/', include("Location.urls")),
     path('user/', include("User.urls")),
+    path('flight/', include("Flight.urls")),
 ]
 
