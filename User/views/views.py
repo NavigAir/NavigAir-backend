@@ -47,7 +47,8 @@ def userList(request):
     openapi.Parameter('dni', openapi.IN_QUERY, description="User's dni", type=openapi.TYPE_STRING, required=True),
     openapi.Parameter('passport', openapi.IN_QUERY, description="User's passport", type=openapi.TYPE_STRING, required=True),
     openapi.Parameter('address', openapi.IN_QUERY, description="User's address", type=openapi.TYPE_STRING),
-    openapi.Parameter('birthday', openapi.IN_QUERY, description="User's birthday", type=openapi.TYPE_STRING)
+    openapi.Parameter('birthday', openapi.IN_QUERY, description="User's birthday", type=openapi.TYPE_STRING),
+    openapi.Parameter('assigned_flight', openapi.IN_QUERY, description="User's flight", type=openapi.TYPE_STRING)
     ],
     responses={
         200: openapi.Response('User Created Successfully'),
@@ -70,7 +71,8 @@ def userList(request):
         openapi.Parameter('passport', openapi.IN_QUERY, description="User's passport", type=openapi.TYPE_STRING,
                           required=True),
         openapi.Parameter('address', openapi.IN_QUERY, description="User's address", type=openapi.TYPE_STRING),
-        openapi.Parameter('birthday', openapi.IN_QUERY, description="User's birthday", type=openapi.TYPE_STRING)
+        openapi.Parameter('birthday', openapi.IN_QUERY, description="User's birthday", type=openapi.TYPE_STRING),
+        openapi.Parameter('assigned_flight', openapi.IN_QUERY, description="User's flight", type=openapi.TYPE_STRING)
     ],
     responses={
         200: openapi.Response('User Updated Successfully'),
@@ -107,10 +109,11 @@ def users(request):
         passport = request.query_params.get('passport')
         address = request.query_params.get('address')
         birthday = request.query_params.get('birthday')
+        assigned_flight = request.query_params.get('assigned_flight')
         if existsUser(mail):
             return JsonResponse({"error": "User already exists."},
                                 status=status.HTTP_400_BAD_REQUEST)
-        serializer = createUser(name, age, visual, mail, pwd, dni, passport, address, birthday)
+        serializer = createUser(name, age, visual, mail, pwd, dni, passport, address, birthday, assigned_flight)
         return JsonResponse(serializer.data, status=status.HTTP_200_OK)
     elif request.method == "PUT":
         age = request.query_params.get('age')
