@@ -1,6 +1,8 @@
 import requests
 
 from BackendNavigair.settings import GOOGLE_MAPS_API_KEY
+from Location.models import Location
+from Location.serializers import LocationSerializer
 
 
 # Convert coordinates into an address
@@ -38,3 +40,12 @@ def convertAddressToCoordinates(address):
     else:
         result = Exception
     return result
+
+# Modify a location
+@staticmethod
+def putLocation(latitude, longitude, type):
+    location = Location.objects.get(latitude=latitude, longitude=longitude)
+    location.type = type
+    location.save()
+    serializer = LocationSerializer(location, many=False)
+    return serializer

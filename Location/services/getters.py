@@ -1,6 +1,8 @@
 import requests
 
 from BackendNavigair.settings import GOOGLE_MAPS_API_KEY
+from Location.models import Location
+from Location.serializers import LocationSerializer
 
 
 # Calculate the distance between two coordinates
@@ -54,3 +56,17 @@ def getNearbyPlaces(latitude, longitude, string):
         return respuesta.json()
     else:
         return Exception
+
+# List all hardcoded Locations
+@staticmethod
+def listLocations():
+    locations = Location.objects.all()
+    data = LocationSerializer(locations, many=True)
+    return data
+
+# Get a location from a certain latitude and longitude
+@staticmethod
+def getLocation(latitude, longitude):
+    location = Location.objects.get(latitude=latitude, longitude=longitude)
+    serializer = LocationSerializer(location)
+    return serializer
