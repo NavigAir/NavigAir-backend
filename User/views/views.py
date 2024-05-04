@@ -111,7 +111,7 @@ def users(request):
         if existsUser(mail):
             return JsonResponse({"error": "User already exists."},
                                 status=status.HTTP_400_BAD_REQUEST)
-        serializer = createUser(name, age, visual, mail, pwd, dni, passport, address, birthday, assigned_flight)
+        serializer = createUser(name, age, visual, mail, pwd, passport, address, birthday)
         return JsonResponse(serializer.data, status=status.HTTP_200_OK)
     elif request.method == "PUT":
         age = request.query_params.get('age')

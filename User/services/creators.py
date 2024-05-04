@@ -4,8 +4,8 @@ from User.serializers import UserSerializer, CheckInSerializer
 
 # Create a new location
 @staticmethod
-def createUser(name, age, visual, mail, pwd, dni, passport, address, birthday, assigned_flight):
-    user = User(name=name, age=age, visual_percentage=visual, mail=mail, pwd=pwd, dni=dni, passport=passport, address=address, birthday=birthday, assigned_flight_id=assigned_flight)
+def createUser(name, age, visual, mail, pwd, passport, address, birthday):
+    user = User(name=name, age=age, visual_percentage=visual, mail=mail, pwd=pwd, passport=passport, address=address, birthday=birthday)
     user.save()
     serializer = UserSerializer(user, many=False)
     return serializer
