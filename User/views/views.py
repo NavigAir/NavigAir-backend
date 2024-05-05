@@ -98,14 +98,14 @@ def users(request):
         except User.DoesNotExist:
             return JsonResponse({'error': 'User does not exist'}, status=status.HTTP_404_NOT_FOUND)
     elif request.method == "POST":
-        name = request.query_params.get('name')
-        age = request.query_params.get('age')
-        visual = request.query_params.get('visual')
-        mail = request.query_params.get('mail')
-        pwd = request.query_params.get('pwd')
-        passport = request.query_params.get('passport')
-        address = request.query_params.get('address')
-        birthday = request.query_params.get('birthday')
+        name = request.body_params.get('name')
+        age = request.body_params.get('age')
+        visual = request.body_params.get('visual')
+        mail = request.body_params.get('mail')
+        pwd = request.body_params.get('pwd')
+        passport = request.body_params.get('passport')
+        address = request.body_params.get('address')
+        birthday = request.body_params.get('birthday')
         if existsUser(mail):
             return JsonResponse({"error": "User already exists."},
                                 status=status.HTTP_400_BAD_REQUEST)
