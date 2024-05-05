@@ -1,3 +1,5 @@
+import json
+
 from django.http import JsonResponse
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
@@ -86,18 +88,20 @@ def locations(request):
         except Location.DoesNotExist:
             return JsonResponse({'error': 'Location does not exist'}, status=status.HTTP_404_NOT_FOUND)
     elif request.method == "POST":
-        latitude = request.query_params.get('latitude')
-        longitude = request.query_params.get('longitude')
-        type = request.query_params.get('type')
+        data = json.loads(request.body)
+        latitude = data.get('latitude')
+        longitude = data.get('longitude')
+        type = data.get('type')
         if existsLocation(latitude, longitude):
             return JsonResponse({"error": "Location for this user already exists."},
                                 status=status.HTTP_400_BAD_REQUEST)
         serializer = createLocation(latitude, longitude, type)
         return JsonResponse(serializer.data, status=status.HTTP_200_OK)
     elif request.method == "PUT":
-        latitude = request.query_params.get('latitude')
-        longitude = request.query_params.get('longitude')
-        type = request.query_params.get('type')
+        data = json.loads(request.body)
+        latitude = data.get('latitude')
+        longitude = data.get('longitude')
+        type = data.get('type')
         try:
             serializer = putLocation(latitude, longitude, type)
             return JsonResponse(serializer.data, status=status.HTTP_200_OK)

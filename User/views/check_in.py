@@ -1,3 +1,5 @@
+import json
+
 from django.http import JsonResponse
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
@@ -72,20 +74,22 @@ def checkIns(request):
         except CheckIn.DoesNotExist:
             return JsonResponse({'error': 'CheckIn does not exist'}, status=status.HTTP_404_NOT_FOUND)
     elif request.method == "POST":
-        mail = request.query_params.get('mail')
-        id = request.query_params.get('id')
+        data = json.loads(request.body)
+        mail = data.get('mail')
+        id = data.get('id')
         if existsCheckIn(mail, id):
             return JsonResponse({"error": "CheckIn already exists."},
                                 status=status.HTTP_400_BAD_REQUEST)
         serializer = createCheckIn(mail, id)
         return JsonResponse(serializer.data, status=status.HTTP_200_OK)
     elif request.method == "PUT":
-        mail = request.query_params.get('mail')
-        id = request.query_params.get('id')
-        seat = request.query_params.get('seat')
-        fast_track = request.query_params.get('fast_track')
-        priority = request.query_params.get('priority')
-        bags = request.query_params.get('bags')
+        data = json.loads(request.body)
+        mail = data.get('mail')
+        id = data.get('id')
+        seat = data.get('seat')
+        fast_track = data.get('fast_track')
+        priority = data.get('priority')
+        bags = data.get('bags')
         try:
             serializer = putCheckIn(mail, id, seat, fast_track, priority, bags)
             return JsonResponse(serializer.data, status=status.HTTP_200_OK)

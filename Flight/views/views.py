@@ -1,3 +1,5 @@
+import json
+
 from django.http import JsonResponse
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
@@ -100,28 +102,30 @@ def flights(request):
         except Flight.DoesNotExist:
             return JsonResponse({'error': 'Flight does not exist'}, status=status.HTTP_404_NOT_FOUND)
     elif request.method == "POST":
-        id = request.query_params.get('id')
-        origin = request.query_params.get('origin')
-        destination = request.query_params.get('destination')
-        departure_time = request.query_params.get('departure_time')
-        arrival_time = request.query_params.get('arrival_time')
-        date = request.query_params.get('date')
-        company = request.query_params.get('company')
-        plane = request.query_params.get('plane')
+        data = json.loads(request.body)
+        id = data.get('id')
+        origin = data.get('origin')
+        destination = data.get('destination')
+        departure_time = data.get('departure_time')
+        arrival_time = data.get('arrival_time')
+        date = data.get('date')
+        company = data.get('company')
+        plane = data.get('plane')
         if existsFlight(id):
             return JsonResponse({"error": "Flight already exists."},
                                 status=status.HTTP_400_BAD_REQUEST)
         serializer = createFlight(id, origin, destination, departure_time, arrival_time, date, company, plane)
         return JsonResponse(serializer.data, status=status.HTTP_200_OK)
     elif request.method == "PUT":
-        id = request.query_params.get('id')
-        origin = request.query_params.get('origin')
-        destination = request.query_params.get('destination')
-        departure_time = request.query_params.get('departure_time')
-        arrival_time = request.query_params.get('arrival_time')
-        date = request.query_params.get('date')
-        company = request.query_params.get('company')
-        plane = request.query_params.get('plane')
+        data = json.loads(request.body)
+        id = data.get('id')
+        origin = data.get('origin')
+        destination = data.get('destination')
+        departure_time = data.get('departure_time')
+        arrival_time = data.get('arrival_time')
+        date = data.get('date')
+        company = data.get('company')
+        plane = data.get('plane')
         try:
             serializer = putFlight(id, origin, destination, departure_time, arrival_time, date, company, plane)
             return JsonResponse(serializer.data, status=status.HTTP_200_OK)

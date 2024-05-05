@@ -1,3 +1,5 @@
+import json
+
 from django.http import JsonResponse
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
@@ -87,24 +89,26 @@ def boardings(request):
         except Boarding.DoesNotExist:
             return JsonResponse({'error': 'Boarding does not exist'}, status=status.HTTP_404_NOT_FOUND)
     elif request.method == "POST":
-        id = request.query_params.get('id')
-        latitude = request.query_params.get('latitude')
-        longitude = request.query_params.get('longitude')
-        opening_time = request.query_params.get('opening_time')
-        last_call = request.query_params.get('last_call')
-        opened = request.query_params.get('opened')
+        data = json.loads(request.body)
+        id = data.get('id')
+        latitude = data.get('latitude')
+        longitude = data.get('longitude')
+        opening_time = data.get('opening_time')
+        last_call = data.get('last_call')
+        opened = data.get('opened')
         if existsBoarding(id, latitude, longitude):
             return JsonResponse({"error": "Boarding already exists."},
                                 status=status.HTTP_400_BAD_REQUEST)
         serializer = createBoarding(id, latitude, longitude, opening_time, last_call, opened)
         return JsonResponse(serializer.data, status=status.HTTP_200_OK)
     elif request.method == "PUT":
-        id = request.query_params.get('id')
-        latitude = request.query_params.get('latitude')
-        longitude = request.query_params.get('longitude')
-        opening_time = request.query_params.get('opening_time')
-        last_call = request.query_params.get('last_call')
-        opened = request.query_params.get('opened')
+        data = json.loads(request.body)
+        id = data.get('id')
+        latitude = data.get('latitude')
+        longitude = data.get('longitude')
+        opening_time = data.get('opening_time')
+        last_call = data.get('last_call')
+        opened = data.get('opened')
         try:
             serializer = putBoarding(id, latitude, longitude, opening_time, last_call, opened)
             return JsonResponse(serializer.data, status=status.HTTP_200_OK)

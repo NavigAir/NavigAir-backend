@@ -1,3 +1,5 @@
+import json
+
 from django.http import JsonResponse
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
@@ -95,22 +97,24 @@ def boardingDoors(request):
         except Location.DoesNotExist:
             return JsonResponse({'error': 'Location does not exist'}, status=status.HTTP_404_NOT_FOUND)
     elif request.method == "POST":
-        latitude = request.query_params.get('latitude')
-        longitude = request.query_params.get('longitude')
-        type = request.query_params.get('type')
-        code = request.query_params.get('code')
-        finger = request.query_params.get('finger')
+        data = json.loads(request.body)
+        latitude = data.get('latitude')
+        longitude = data.get('longitude')
+        type = data.get('type')
+        code = data.get('code')
+        finger = data.get('finger')
         if existsBoardingDoor(latitude, longitude):
             return JsonResponse({"error": "Location for this user already exists."},
                                 status=status.HTTP_400_BAD_REQUEST)
         serializer = createBoardingDoor(latitude, longitude, type, code, finger)
         return JsonResponse(serializer.data, status=status.HTTP_200_OK)
     elif request.method == "PUT":
-        latitude = request.query_params.get('latitude')
-        longitude = request.query_params.get('longitude')
-        type = request.query_params.get('type')
-        code = request.query_params.get('code')
-        finger = request.query_params.get('finger')
+        data = json.loads(request.body)
+        latitude = data.get('latitude')
+        longitude = data.get('longitude')
+        type = data.get('type')
+        code = data.get('code')
+        finger = data.get('finger')
         try:
             serializer = putBoardingDoor(latitude, longitude, type, code, finger)
             return JsonResponse(serializer.data, status=status.HTTP_200_OK)

@@ -1,3 +1,5 @@
+import json
+
 from django.http import JsonResponse
 from django.shortcuts import render
 from drf_yasg import openapi
@@ -46,7 +48,8 @@ from Location.services.setters import convertAddressToCoordinates, convertCoordi
 )
 @api_view(['PUT'])
 def addressConverter(request):
-    address = request.data.get('address')
+    data = json.loads(request.body)
+    address = data.get('address')
     if address is None:
         return JsonResponse({'error': 'Address is required'}, status=status.HTTP_400_BAD_REQUEST)
     try:
@@ -95,8 +98,9 @@ def addressConverter(request):
 )
 @api_view(['PUT'])
 def coordinatesConverter(request):
-    latitude = request.data.get('latitude')
-    longitude = request.data.get('longitude')
+    data = json.loads(request.body)
+    latitude = data.get('latitude')
+    longitude = data.get('longitude')
     if None in [latitude, longitude]:
         return JsonResponse({'error': 'Latitude and longitude are required'}, status=status.HTTP_400_BAD_REQUEST)
     try:
