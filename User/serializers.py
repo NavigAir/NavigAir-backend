@@ -9,7 +9,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['name', 'age', 'visual_percentage', 'mail', 'pwd', 'dni', 'passport', 'address', 'birthday', 'assigned_flight']
+        fields = ['name', 'age', 'visual_percentage', 'mail', 'pwd', 'passport', 'address', 'birthday', 'assigned_flight']
 
 class CheckInSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)

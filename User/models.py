@@ -15,14 +15,6 @@ class User(models.Model):
     birthday = models.DateField(null=True)
     assigned_flight = models.ForeignKey(Flight, on_delete=models.PROTECT, null=True)
 
-    def clean(self):
-        if self.visual_percentage < 0 or self.visual_percentage > 100:
-            raise ValidationError({'visual_percentage': 'Visual percentage must be between 0 and 100.'})
-
-    def save(self, *args, **kwargs):
-        self.full_clean()  # Validación antes de guardar
-        super().save(*args, **kwargs)
-
     def __str__(self):
         return self.name
 

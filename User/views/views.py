@@ -40,15 +40,13 @@ def userList(request):
     operation_description="Add a new user",
     manual_parameters=[
     openapi.Parameter('name', openapi.IN_QUERY, description="User's name", type=openapi.TYPE_STRING, required=True),
-    openapi.Parameter('age', openapi.IN_QUERY, description="User's age", type=openapi.TYPE_INTEGER, required=True),
+    openapi.Parameter('age', openapi.IN_QUERY, description="User's age", type=openapi.TYPE_INTEGER),
     openapi.Parameter('visual', openapi.IN_QUERY, description="User's visual limitation", type=openapi.TYPE_INTEGER, required=True),
     openapi.Parameter('mail', openapi.IN_QUERY, description="User's mail", type=openapi.TYPE_STRING, required=True),
     openapi.Parameter('pwd', openapi.IN_QUERY, description="User's password", type=openapi.TYPE_STRING, required=True),
-    openapi.Parameter('dni', openapi.IN_QUERY, description="User's dni", type=openapi.TYPE_STRING, required=True),
     openapi.Parameter('passport', openapi.IN_QUERY, description="User's passport", type=openapi.TYPE_STRING, required=True),
     openapi.Parameter('address', openapi.IN_QUERY, description="User's address", type=openapi.TYPE_STRING),
     openapi.Parameter('birthday', openapi.IN_QUERY, description="User's birthday", type=openapi.TYPE_STRING),
-    openapi.Parameter('assigned_flight', openapi.IN_QUERY, description="User's flight", type=openapi.TYPE_STRING)
     ],
     responses={
         200: openapi.Response('User Created Successfully'),

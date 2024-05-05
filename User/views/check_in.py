@@ -26,11 +26,6 @@ from User.services.setters import putCheckIn
     manual_parameters=[
     openapi.Parameter('mail', openapi.IN_QUERY, description="User's mail", type=openapi.TYPE_STRING, required=True),
     openapi.Parameter('id', openapi.IN_QUERY, description="Flight's id", type=openapi.TYPE_STRING, required=True),
-    openapi.Parameter('seat', openapi.IN_QUERY, description="Check-in seat", type=openapi.TYPE_STRING, required=True),
-    openapi.Parameter('fast_track', openapi.IN_QUERY, description="Check-in fast track", type=openapi.TYPE_BOOLEAN, required=True),
-    openapi.Parameter('priority', openapi.IN_QUERY, description="Check-in priority", type=openapi.TYPE_BOOLEAN, required=True),
-    openapi.Parameter('bags', openapi.IN_QUERY, description="Check-in bags", type=openapi.TYPE_INTEGER, required=True),
-
     ],
     responses={
         200: openapi.Response('Check-in Created Successfully'),
@@ -79,14 +74,10 @@ def checkIns(request):
     elif request.method == "POST":
         mail = request.query_params.get('mail')
         id = request.query_params.get('id')
-        seat = request.query_params.get('seat')
-        fast_track = request.query_params.get('fast_track')
-        priority = request.query_params.get('priority')
-        bags = request.query_params.get('bags')
         if existsCheckIn(mail, id):
             return JsonResponse({"error": "CheckIn already exists."},
                                 status=status.HTTP_400_BAD_REQUEST)
-        serializer = createCheckIn(mail, id, seat, fast_track, priority, bags)
+        serializer = createCheckIn(mail, id)
         return JsonResponse(serializer.data, status=status.HTTP_200_OK)
     elif request.method == "PUT":
         mail = request.query_params.get('mail')
