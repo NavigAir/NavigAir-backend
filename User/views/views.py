@@ -1,3 +1,5 @@
+import json
+
 from django.http import JsonResponse
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
@@ -98,14 +100,15 @@ def users(request):
         except User.DoesNotExist:
             return JsonResponse({'error': 'User does not exist'}, status=status.HTTP_404_NOT_FOUND)
     elif request.method == "POST":
-        name = request.body_params.get('name')
-        age = request.body_params.get('age')
-        visual = request.body_params.get('visual')
-        mail = request.body_params.get('mail')
-        pwd = request.body_params.get('pwd')
-        passport = request.body_params.get('passport')
-        address = request.body_params.get('address')
-        birthday = request.body_params.get('birthday')
+        data = json.loads(request.body)
+        name = data.get('name')
+        age = data.get('age')
+        visual = data.get('visual')
+        mail = data.get('mail')
+        pwd = data.get('pwd')
+        passport = data.get('passport')
+        address = data.get('address')
+        birthday = data.get('birthday')
         if existsUser(mail):
             return JsonResponse({"error": "User already exists."},
                                 status=status.HTTP_400_BAD_REQUEST)
